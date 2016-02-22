@@ -1,0 +1,133 @@
+
+TALLER 1 ARQUITECTURA DE COMPUTADORES
+
+
+
+
+1. 4 PRINCIPIOS DE DISEÑO DE HARDWARE
+1.	
+2.	 La simplicidad favorece la regularidad
+3.	Entre mas pequeño mas rápido
+4.	 Hacer el caso común mas rápido
+5.	Buenos diseños demandan grandes compromisos
+
+
+2. Convertir a instrucciones  de bajo nivel
+
+int x=0;
+int y=8;
+int z=1;
+
+y=x+3;
+z=z+3;
+x=(x-z)+(3+y);
+
+solución:
+x=%L0     y=%L1     z=L2
+
+ 
+ add  %L0, 3, %L1
+add  %L2, 3, %L2
+sub %L0, %L2, %L3
+add 3, %L1, %L4
+add %L3, %L4, %L0
+
+
+
+
+3. Usar el ld, y st.
+a[4]= a[2]+x;                        
+y = y[40]+13;
+
+solución:
+
+ld (%L0,8), %L2                                                       a=%L0       x=%L1
+add %L2, %L1, %L3
+add %g0, %L3, %L4
+st (%L4, 16)
+
+
+ld (%g0, 160), %L1                               y=%g0
+add %L1, 13, %g0
+
+
+
+4. Convertir a lenguaje de maquina.
+a.
+int main(){
+int i =3; p=2;
+return i+3;
+}
+
+b.
+int main(){
+int p=3; x=1; z=4;
+int w=0;
+w=(p+40)+(x-z);
+return 0;
+}
+
+solución:
+
+a.      i=%L0        p=%L1
+0x0000	add	%go, 3, %L0
+0x0004	add	%g0, 2, %L1
+0x0008	add	%L0, 3, %o0
+   
+
+0x0000	10	10000	000000	00000	1	0000000000011
+0x0004	10	10001	000000	00000	1	0000000000010
+0x0008	10	01000	000000	10000	1	0000000000011
+
+
+b.         p=%L0         x=%L1                 z=%L2          w=%L3
+
+
+0x0000	add	%go, 3, %L0
+0x0004	add	%g0, 1, %L1
+0x0008	add	%g0, 4, %L2
+0x000c	add	%L0, 40, %L4
+0x0010	sub	%L1, %L2, %L5
+0x0014	add	%L4, %L5, %L3
+0x0018	add	%g0, 0, %o0
+
+
+
+
+
+
+5. Inicializar las siguientes variables negativas usando OR.
+n=-12,
+a=-11,
+b=-14.
+
+Solución:
+
+n=%L0      a=%L1     b=%L0
+-12=    1100 >0011 + 1=0100
+-11=    1011 >0100 + 1=0101
+-14=    1110 >0001 + 1=0010
+            
+    
+
+
+0x0000	add	%go, -12, %L0
+0x0004	or	%g0, %L0, %o0
+0x0008	add	%g0, -11, %L1
+0x000c	or	%g0, %L1, %o1
+0x0010	add	%g0, -14, %L2
+0x0014	or	%g0, %L2, %o2
+
+
+
+
+
+
+
+0x0000	10	10000	000000	00000	1	1111111110100
+0x0004	10	01000	000010	00000	0	0000000010000
+0x0008	10	10001	000000	00000	1	1111111110101
+0x000c	10	01001	000010	00000	0	0000000001010
+0x0010	10	10010	000000	00000	1	1111111110010
+0x0014	10	01011	000010	00000	0	0000000010010
+
