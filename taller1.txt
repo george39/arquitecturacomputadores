@@ -46,7 +46,7 @@ solución:
 
 ld %L0,8, %L2                                                       a=%L0       x=%L1
 add %L2, %L1, %L3
-st (%L3, 16)
+st %L3, %L0, 16
 
 
 ld (%g0, 160), %L1                               y=%g0
